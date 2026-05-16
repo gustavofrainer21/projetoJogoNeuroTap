@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Main implements ApplicationListener {
     ShapeRenderer shapeRenderer;
@@ -21,14 +22,16 @@ public class Main implements ApplicationListener {
 
     Texture backgroundTexture;
     Texture dropTexture;
-    Texture spaceshipTexture;
+    Texture avatarTexture;
     
     Array<Sprite> dropSprites;
-    Sprite spaceshipSprite; // Adicionado: Sprite da nave
+    Sprite avatarSprite;
     
     float dropTimer;
 
     Music music;
+
+    Rectangle linhaRect;
 
     private static final float WORLD_WIDTH = 800;
     private static final float WORLD_HEIGHT = 480;
@@ -37,13 +40,13 @@ public class Main implements ApplicationListener {
     public void create() {
         dropTexture = new Texture("meteoro.png");
         backgroundTexture = new Texture("background.jpg");
-        spaceshipTexture = new Texture("nave_L.png");
+        avatarTexture = new Texture("Avatar.png");
         dropSprites = new Array<>();
 
-        // Configuração da Nave
-        spaceshipSprite = new Sprite(spaceshipTexture);
-        spaceshipSprite.setSize(60, 60);
-        spaceshipSprite.setPosition(WORLD_WIDTH / 2 - 30, 20);
+        // Config avatar
+        avatarSprite = new Sprite(avatarTexture);
+        avatarSprite.setSize(60, 60);
+        avatarSprite.setPosition(WORLD_WIDTH / 2 - 30, 20);
 
         shapeRenderer = new ShapeRenderer();
         spriteBatch = new SpriteBatch();
@@ -55,7 +58,10 @@ public class Main implements ApplicationListener {
         music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
         music.setLooping(true);
         music.setVolume(.1f);
-        music.play();
+        //music.play();
+
+        float espessura = 5f;
+        linhaRect = new Rectangle(0, WORLD_HEIGHT / 2 - espessura / 2, WORLD_WIDTH, espessura);
     }
 
     @Override
@@ -99,9 +105,28 @@ public class Main implements ApplicationListener {
                 dropSprites.removeValue(drop, true);
             }
         }
+        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.SPACE)) {
+            atirar();
+        }
+    }
+
+    private void atirar() {
+        float yMeio = WORLD_HEIGHT / 2;
+        float zonaInicio = yMeio - 40f; // margem abaixo da linha
+        float zonaFim = yMeio + 40f;    // margem acima da linha
+
+        for (int i = dropSprites.size - 1; i >= 0; i--) {
+            Sprite drop = dropSprites.get(i);
+            float dropCentroY = drop.getY() + drop.getHeight() / 2;
+
+            if (dropCentroY >= zonaInicio && dropCentroY <= zonaFim) {
+                dropSprites.removeIndex(i);
+            }
+        }
     }
 
     private void draw() {
+        float yMeio = WORLD_HEIGHT / 2;
         spriteBatch.begin();
         
         // Fundo
@@ -112,15 +137,19 @@ public class Main implements ApplicationListener {
             dropSprite.draw(spriteBatch);
         }
         
-        // Nave (Desenhada por último para ficar na frente)
-        spaceshipSprite.draw(spriteBatch);
+        // Avatar
+        
+        avatarSprite.setSize(100, 100);
+        avatarSprite.setX(-23);
+        avatarSprite.setY(yMeio - avatarSprite.getHeight() / 2);
+        avatarSprite.draw(spriteBatch);
         
         spriteBatch.end();
-
+        Gdx.gl.glLineWidth(3f);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(1, 0, 0, 1);
-        float yMeio = WORLD_HEIGHT / 2;
-        shapeRenderer.line(0, yMeio, WORLD_WIDTH, yMeio);
+        
+        shapeRenderer.line(50, yMeio, WORLD_WIDTH, yMeio);
         shapeRenderer.end();
     }
 
@@ -141,7 +170,7 @@ public class Main implements ApplicationListener {
         backgroundTexture.dispose();
         spriteBatch.dispose();
         dropTexture.dispose();
-        spaceshipTexture.dispose(); // Adicionado: Limpeza da textura da nave
+        avatarTexture.dispose();
         music.dispose();
     }
 }
