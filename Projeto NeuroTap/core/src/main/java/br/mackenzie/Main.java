@@ -3,8 +3,10 @@ package br.mackenzie;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -32,6 +34,10 @@ public class Main implements ApplicationListener {
     Music music;
 
     Rectangle linhaRect;
+
+    int score = 0;
+    BitmapFont font;
+    SpriteBatch batch;
 
     private static final float WORLD_WIDTH = 800;
     private static final float WORLD_HEIGHT = 480;
@@ -62,6 +68,10 @@ public class Main implements ApplicationListener {
 
         float espessura = 5f;
         linhaRect = new Rectangle(0, WORLD_HEIGHT / 2 - espessura / 2, WORLD_WIDTH, espessura);
+
+        batch = new SpriteBatch();
+        font = new BitmapFont();
+        font.setColor(Color.RED);
     }
 
     @Override
@@ -90,11 +100,18 @@ public class Main implements ApplicationListener {
 
     private void logic() {
         float delta = Gdx.graphics.getDeltaTime(); 
-
+        
         dropTimer += delta;
-        if (dropTimer > 1.7f) {
+        if(score < 10){
+            if (dropTimer > 1.7f) {
             createDroplet();
             dropTimer = 0;
+            }
+        }else{
+            if (dropTimer > 0.7f) {
+            createDroplet();
+            dropTimer = 0;
+            }
         }
 
         for (int i = 0; i < dropSprites.size; i++) {
@@ -121,6 +138,7 @@ public class Main implements ApplicationListener {
 
             if (dropCentroY >= zonaInicio && dropCentroY <= zonaFim) {
                 dropSprites.removeIndex(i);
+                score += 1;
             }
         }
     }
@@ -151,6 +169,10 @@ public class Main implements ApplicationListener {
         
         shapeRenderer.line(50, yMeio, WORLD_WIDTH, yMeio);
         shapeRenderer.end();
+
+        batch.begin();
+        font.draw(batch, "Score: " + score, 560, 450);
+        batch.end();
     }
 
     @Override
