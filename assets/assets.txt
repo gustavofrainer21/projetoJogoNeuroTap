@@ -1,0 +1,6 @@
+Avatar.png
+Coração.png
+background2.png
+meteoro.png
+meteoro2.png
+music.mp3
