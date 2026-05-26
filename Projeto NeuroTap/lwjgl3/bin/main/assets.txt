@@ -1,0 +1,10 @@
+.gitkeep
+bolota.png
+bucket.png
+drop.mp3
+drop.png
+linha.png
+music.mp3
+nave.png
+space.jpg
+tiro.png
