@@ -318,14 +318,14 @@ public class Main implements ApplicationListener {
 
             spriteBatch.begin();
             font.setColor(Color.WHITE);
-            font.draw(spriteBatch, "--- JOGO PAUSADO ---", WORLD_WIDTH / 2 - 75, WORLD_HEIGHT / 2 + 80);
+            font.draw(spriteBatch, "--- JOGO PAUSADO ---", WORLD_WIDTH / 2 - 70, WORLD_HEIGHT / 2 + 80);
 
             if (menuSelection == 0) {
                 font.setColor(Color.YELLOW);
-                font.draw(spriteBatch, "> RESUMIR <", WORLD_WIDTH / 2 - 45, WORLD_HEIGHT / 2 + 10);
+                font.draw(spriteBatch, "> CONTINUAR <", WORLD_WIDTH / 2 - 51, WORLD_HEIGHT / 2 + 10);
             } else {
                 font.setColor(Color.WHITE);
-                font.draw(spriteBatch, "  RESUMIR  ", WORLD_WIDTH / 2 - 45, WORLD_HEIGHT / 2 + 10);
+                font.draw(spriteBatch, "  CONTINUAR  ", WORLD_WIDTH / 2 - 51, WORLD_HEIGHT / 2 + 10);
             }
 
             if (menuSelection == 1) {
