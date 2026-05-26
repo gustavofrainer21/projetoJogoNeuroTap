@@ -1,8 +1,0 @@
-Avatar.png
-Avatar1.png
-background.jpg
-linha.png
-meteoro.png
-music.mp3
-nave_L.png
-nave_R.png
